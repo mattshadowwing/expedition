@@ -9,6 +9,7 @@ import {Suspend} from "@/components/ui/suspend";
 import {MusicSuspend} from "@/components/musicSuspend";
 import {Button} from "@/components/ui/button";
 import { PlusCircledIcon } from "@radix-ui/react-icons"
+import {MusicFetch} from "@/components/musicFetch";
 
 export function TabsMusic() {
     return (
@@ -36,7 +37,7 @@ export function TabsMusic() {
                         <h2 className="text-2xl font-semibold tracking-tight">Listen Now</h2>
                         <p className="text-sm text-muted-foreground">Top picks for you. Updated daily.</p>
                     </div>
-                    <MusicSuspend />
+                    <MusicFetch />
                 </Suspense>
             </TabsContent>
             <TabsContent value="podcasts">
