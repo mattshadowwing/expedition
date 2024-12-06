@@ -1,7 +1,6 @@
 "use client"
 
 import Form from "next/form";
-import {PlusCircledIcon} from "@radix-ui/react-icons";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {FormAction} from "@/components/actions/formAction";
@@ -29,14 +28,14 @@ export default function Optimistic() {
     const [error1, setError1] = useState(false)
     const [done1, setDone1] = useState(false)
     const [error2, setError2] = useState(false)
-    const [done2, setDone2] = useState(false)
     const [error3, setError3] = useState(false)
+    const [done2, setDone2] = useState(false)
     const [done3, setDone3] = useState(false)
     const [text1, submitAction, isPending1] = useActionState(
-        async (prev, formData) => {
+        async (prev: string | null, formData: FormData) => {
             setError1(false)
             setDone1(false)
-            const newText = await FormAction(formData.get('text'))
+            const newText = await FormAction(formData.get('text') as string)
             if (!newText) {
                 setError1(true)
                 return null
@@ -47,11 +46,11 @@ export default function Optimistic() {
         '',
     )
     const [text2, submitActionOptimistic, isPending2] = useActionState(
-        async (prev, formData) => {
-            setOptimisticText(formData.get('text'))
+        async (prev: string | null, formData: FormData) => {
+            setOptimisticText(formData.get('text') as string)
             setError2(false)
             setDone2(false)
-            const newText = await FormAction(formData.get('text'))
+            const newText = await FormAction(formData.get('text') as string)
             if (!newText) {
                 setError2(true)
                 return null
@@ -62,8 +61,8 @@ export default function Optimistic() {
         '',
     )
     const [text3, submitActionTransition, isPending3] = useActionState(
-        async (prev, formData) => {
-            setOptimisticTextTransition(formData.get('text'))
+        async (prev: string | null, formData: FormData) => {
+            setOptimisticTextTransition(formData.get('text') as string)
             setError3(false)
             setDone3(false)
             const newText = await fetch(`/api?text=${formData.get('text')}`, { signal })
@@ -102,8 +101,7 @@ export default function Optimistic() {
                         <Input name="text" placeholder="text" />
                         <div>
                             <Button disabled={isPending1}>
-                                <PlusCircledIcon className="mr-2 h-4 w-4" />
-                                Add text
+                                + Add text
                             </Button>
                         </div>
                         <div className="flex gap-4 text-lg">
@@ -120,8 +118,7 @@ export default function Optimistic() {
                         <Input name="text" placeholder="text" />
                         <div>
                             <Button disabled={isPending2}>
-                                <PlusCircledIcon className="mr-2 h-4 w-4" />
-                                Add text
+                                + Add text
                             </Button>
                         </div>
                         <div className="flex gap-4 text-lg">
@@ -138,8 +135,7 @@ export default function Optimistic() {
                         <Input name="text" placeholder="text" />
                         <div>
                             <Button>
-                                <PlusCircledIcon className="mr-2 h-4 w-4" />
-                                Add text
+                                + Add text
                             </Button>
                         </div>
                         <div className="flex gap-4 text-lg">

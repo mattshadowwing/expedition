@@ -15,19 +15,24 @@ export async function MusicFetch() {
         headers: { Authorization: bearer },
     })
     const music = await res.json()
-    return (
-        <div className="grid grid-cols-4 gap-2">
-            {music?.tracks?.map(track => (
-                <div key={track.id} className="grid gap-2">
-                    <Image src={track.album?.images?.[0]?.url} alt="track" width={track.album?.images?.[0]?.width} height={track.album?.images?.[0]?.height} />
-                    {track.name && (
-                        <p className="text-l font-semibold tracking-tight">{track.name}</p>
-                    )}
-                    {track.artists?.[0]?.name && (
-                        <p className="text-sm text-muted-foreground">{track.artists?.[0]?.name}</p>
-                    )}
-                </div>
-            ))}
-        </div>
-    )
+    if (music) {
+        return (
+            <div className="grid grid-cols-4 gap-2">
+                {/* @ts-expect-error track any */}
+                {music?.tracks?.map(track => (
+                    <div key={track.id} className="grid gap-2">
+                        <Image src={track.album?.images?.[0]?.url} alt="track" width={track.album?.images?.[0]?.width}
+                               height={track.album?.images?.[0]?.height}/>
+                        {track.name && (
+                            <p className="text-l font-semibold tracking-tight">{track.name}</p>
+                        )}
+                        {track.artists?.[0]?.name && (
+                            <p className="text-sm text-muted-foreground">{track.artists?.[0]?.name}</p>
+                        )}
+                    </div>
+                ))}
+            </div>
+        )
+    }
+    return "error"
 }

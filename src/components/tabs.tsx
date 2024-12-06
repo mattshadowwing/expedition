@@ -8,7 +8,6 @@ import {Suspense} from "react";
 import {Suspend} from "@/components/ui/suspend";
 import {MusicSuspend} from "@/components/musicSuspend";
 import {Button} from "@/components/ui/button";
-import { PlusCircledIcon } from "@radix-ui/react-icons"
 import {MusicFetch} from "@/components/musicFetch";
 
 export function TabsMusic() {
@@ -26,8 +25,7 @@ export function TabsMusic() {
                 </TabsList>
                 <div className="ml-auto mr-4">
                     <Button>
-                        <PlusCircledIcon className="mr-2 h-4 w-4" />
-                        Add music
+                        + Add music
                     </Button>
                 </div>
             </div>
