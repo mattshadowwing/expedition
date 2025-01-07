@@ -4,7 +4,7 @@ import Form from "next/form";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {FormAction} from "@/components/actions/formAction";
-import {useActionState, useOptimistic, useState, useEffect} from "react"
+import {useActionState, useOptimistic, useState, useEffect, useRef} from "react"
 import {Suspend} from "@/components/ui/suspend";
 
 const Loader = () => (
@@ -23,14 +23,33 @@ const Loader = () => (
 )
 
 export default function Optimistic() {
-    const controller = new AbortController()
-    const { signal } = controller
+    const abortControllerRef = useRef(new AbortController());
     const [error1, setError1] = useState(false)
     const [done1, setDone1] = useState(false)
     const [error2, setError2] = useState(false)
     const [error3, setError3] = useState(false)
     const [done2, setDone2] = useState(false)
     const [done3, setDone3] = useState(false)
+
+    const handleSearch = async (query: string) => {
+        console.log(abortControllerRef.current)
+        if (abortControllerRef.current) {
+            abortControllerRef.current.abort();
+        }
+        abortControllerRef.current = new AbortController();
+
+        return await fetch(`/api?text=${query}`, { signal: abortControllerRef.current.signal })
+            .then(response => response.json())
+            .then(data => {
+                return data
+            })
+            .catch(error => {
+                if (error.name !== 'AbortError') {
+                    console.error('Fetch error:', error);
+                }
+            });
+    };
+
     const [text1, submitAction, isPending1] = useActionState(
         async (prev: string | null, formData: FormData) => {
             setError1(false)
@@ -65,7 +84,7 @@ export default function Optimistic() {
             setOptimisticTextTransition(formData.get('text') as string)
             setError3(false)
             setDone3(false)
-            const newText = await fetch(`/api?text=${formData.get('text')}`, { signal })
+            const newText = await handleSearch(formData.get('text') as string)
             if (!newText) {
                 setError3(true)
                 return null
@@ -81,8 +100,7 @@ export default function Optimistic() {
     useEffect(() => {
         console.log('use effect')
         return () => {
-            console.log('use effect abort')
-            controller.abort()
+            console.log('use effect end')
         }
     }, [])
 
