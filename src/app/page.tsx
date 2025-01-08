@@ -4,7 +4,7 @@ import Form from "next/form";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {FormAction} from "@/components/actions/formAction";
-import {useActionState, useOptimistic, useState, useEffect, useRef} from "react"
+import {useActionState, useOptimistic, useState, useEffect} from "react"
 import {Suspend} from "@/components/ui/suspend";
 
 const Loader = () => (
@@ -23,29 +23,10 @@ const Loader = () => (
 )
 
 export default function Optimistic() {
-    const abortControllerRef = useRef(new AbortController());
     const [error1, setError1] = useState(false)
     const [done1, setDone1] = useState(false)
     const [error2, setError2] = useState(false)
-    const [error3, setError3] = useState(false)
     const [done2, setDone2] = useState(false)
-    const [done3, setDone3] = useState(false)
-
-    const handleSearch = (query: string) => {
-        if (abortControllerRef.current) {
-            console.log('aborting')
-            abortControllerRef.current.abort();
-        }
-        abortControllerRef.current = new AbortController();
-
-        return fetch(`/api?text=${query}`, { signal: abortControllerRef.current.signal })
-            .then(response => response)
-            .catch(error => {
-                if (error.name !== 'AbortError') {
-                    console.error('Fetch error:', error);
-                }
-            });
-    };
 
     const [text1, submitAction, isPending1] = useActionState(
         async (prev: string | null, formData: FormData) => {
@@ -76,23 +57,7 @@ export default function Optimistic() {
         },
         '',
     )
-    const [text3, submitActionTransition, isPending3] = useActionState(
-        async (prev: string | null, formData: FormData) => {
-            setOptimisticTextTransition(formData.get('text') as string)
-            setError3(false)
-            setDone3(false)
-            const newText = handleSearch(formData.get('text') as string)
-            if (!newText) {
-                setError3(true)
-                return null
-            }
-            setDone3(true)
-            return newText.toString()
-        },
-        '',
-    )
     const [optimisticText, setOptimisticText] = useOptimistic(text2);
-    const [optimisticTextTransition, setOptimisticTextTransition] = useOptimistic(text3);
 
     useEffect(() => {
         console.log('use effect')
@@ -103,7 +68,7 @@ export default function Optimistic() {
 
     return (
         <div className="container relative py-5">
-            <main className="grid grid-cols-4 gap-4">
+            <main className="grid grid-cols-3 gap-4">
                 <div className="border border-neutral-900 rounded-xl p-5 grid gap-4">
                     <h2>Suspense</h2>
                     <Suspend className="w-full h-[40px]"/>
@@ -141,23 +106,6 @@ export default function Optimistic() {
                             {isPending2 && (<Loader />)}
                             {!isPending2 && error2 && (<p className="text-red-700">Error!</p>)}
                             {!isPending2 && done2 && (<p className="text-green-700">Done!</p>)}
-                        </div>
-                    </Form>
-                </div>
-                <div className="border border-neutral-900 rounded-xl p-5 grid gap-4">
-                    <h2>Cancellable Optimistic response</h2>
-                    <Form action={submitActionTransition} className="grid gap-8">
-                        <Input name="text" placeholder="text" />
-                        <div>
-                            <Button>
-                                + Add text
-                            </Button>
-                        </div>
-                        <div className="flex gap-4 text-lg">
-                            <p className="font-semibold">{optimisticTextTransition}</p>
-                            {isPending3 && (<Loader />)}
-                            {!isPending3 && error3 && (<p className="text-red-700">Error!</p>)}
-                            {!isPending3 && done3 && (<p className="text-green-700">Done!</p>)}
                         </div>
                     </Form>
                 </div>
