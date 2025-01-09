@@ -1,8 +1,8 @@
 import { Suspense } from "react";
-import { getProduct4, getPrice4 } from "./../db";
+import { getProductMix, getPriceMix } from "./../db";
 
 export default async function ProductPage3() {
-  const description = await getProduct4();
+  const description = await getProductMix();
 
   return (
     <div className="p-10 flex flex-col items-center">
@@ -18,6 +18,6 @@ export default async function ProductPage3() {
 }
 
 async function Price() {
-  const price = await getPrice4();
+  const price = await getPriceMix();
   return <h1 className="text-blue-500 text-xl">${price}</h1>;
 }

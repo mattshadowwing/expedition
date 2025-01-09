@@ -18,23 +18,13 @@ export async function getPrice2() {
   return faker.commerce.price();
 }
 
-export async function getProduct3() {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  return faker.commerce.productName();
-}
-
-export async function getPrice3() {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  return faker.commerce.price();
-}
-
-export async function getProduct4() {
+export async function getProductMix() {
   "use cache";
   await new Promise((resolve) => setTimeout(resolve, 1000));
   return faker.commerce.productName();
 }
 
-export async function getPrice4() {
+export async function getPriceMix() {
   await new Promise((resolve) => setTimeout(resolve, 1000));
   return faker.commerce.price();
 }

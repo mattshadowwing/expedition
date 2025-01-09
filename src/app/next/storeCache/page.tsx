@@ -1,7 +1,7 @@
 "use cache";
 
 import { Suspense } from "react";
-import { getProduct3, getPrice3 } from "./../db";
+import { getProduct2, getPrice2 } from "./../db";
 // import { unstable_cacheLife as cacheLife } from "next/cache";
 
 import Loading from "./loading";
@@ -9,8 +9,8 @@ import Loading from "./loading";
 export default async function ProductPage3() {
   // cacheLife('days')
 
-  const description = await getProduct3();
-  const price = await getPrice3();
+  const description = await getProduct2();
+  const price = await getPrice2();
 
   return (
     <div className="p-10 flex flex-col items-center">
