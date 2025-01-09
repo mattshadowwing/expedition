@@ -7,7 +7,7 @@ import { getProduct2, getPrice2 } from "./../db";
 import Loading from "./loading";
 
 export default async function ProductPage3() {
-  // cacheLife('days')
+  // cacheLife('')
 
   const description = await getProduct2();
   const price = await getPrice2();
